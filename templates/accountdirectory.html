@@ -1,0 +1,12 @@
+{% block body %}
+   <h1>Account Directory</h1>
+   <a href="{{ url_for('index') }}">Home</a>
+   {% for account in accounts %}
+    <ul>
+        <li>ID: {{ account[0] }}</li>
+        <li>Username: {{ account[1] }}</li>
+        <li>Password: {{ account[2] }}</li>
+        <li>Type: {{account[3]  }}</li>
+    </ul>
+{% endfor %}
+{% endblock %}

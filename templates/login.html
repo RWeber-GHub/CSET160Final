@@ -1,0 +1,9 @@
+{% block body %}
+<a href="{{ url_for('index') }}">Home</a>
+<h1>Account Login Form</h1>
+<form method="POST">
+    <input type="text" name="username" required placeholder="Username">
+    <input type="password" name="password" required placeholder="Password">
+    <input type="submit" value="Login">
+</form>
+{% endblock %}
