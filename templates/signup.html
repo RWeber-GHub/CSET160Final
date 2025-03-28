@@ -1,13 +1,34 @@
 {% block body %}
-<a href="{{ url_for('index') }}">Home</a>
-<h1>Account Signup Form</h1>
-<form method="POST">
-    <input type="text" name="username" required placeholder="Username">
-    <input type="password" name="password" required placeholder="Password">
-    <select name="type">
-        <option value="student">Student</option>
-        <option value="teacher">Teacher</option>
-    </select>
-    <input type="submit" value="Signup">
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="{{ url_for('index') }}" class="home-link">Home</a>
+            <h1>Account Signup Form</h1>
+        </header>
+        
+        <div class="uni-form">
+            <form method="POST">
+                <input type="text" name="username" required placeholder="Username">
+                <input type="password" name="password" required placeholder="Password">
+                <select name="type">
+                    <option value="A">Student</option>
+                    <option value="B">Teacher</option>
+                </select>
+                <input type="submit" value="Signup">
+            </form>
+        </div>
+    </div>
+    <div>
+        <h1>{{  error  }}</h1>
+    </div>
+</body>
+</html>
 {% endblock %}

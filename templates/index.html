@@ -1,7 +1,25 @@
 {% block body %}
-   <h1>Home</h1>
-   <a href="{{ url_for('login') }}">Login</a>
-   <a href="{{ url_for('signup') }}">Signup</a>
-   <a href="{{ url_for('testviewer') }}">testview</a>
-   <a href="{{ url_for('accountDirectory') }}">Account Directory</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Home</h1>
+        </header>
+        
+        <nav class="nav-links">
+            <a href="{{ url_for('login') }}" class="nav-item">Login</a>
+            <a href="{{ url_for('signup') }}" class="nav-item">Signup</a>
+            <a href="{{ url_for('accountDirectory') }}" class="nav-item">Account Directory</a>
+            <a href="{{ url_for('profile') }}" class="nav-item">ID</a>
+        </nav>
+    </div>
+</body>
+</html>
 {% endblock %}

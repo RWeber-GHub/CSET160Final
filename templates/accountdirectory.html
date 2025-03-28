@@ -1,12 +1,41 @@
 {% block body %}
-   <h1>Account Directory</h1>
-   <a href="{{ url_for('index') }}">Home</a>
-   {% for account in accounts %}
-    <ul>
-        <li>ID: {{ account[0] }}</li>
-        <li>Username: {{ account[1] }}</li>
-        <li>Password: {{ account[2] }}</li>
-        <li>Type: {{account[3]  }}</li>
-    </ul>
-{% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Directory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Account Directory</h1>
+            <a href="{{ url_for('index') }}" class="home-link">Home</a>
+        </header>
+        <div class="filter-form">
+            <form method="POST" action="/account_directory">
+                <label for="type">Filter by Type: </label>
+                <select name="type" id="type">
+                    <option value="A">Student</option>
+                    <option value="B">Teacher</option>
+                </select>
+                <input type="submit" value="Filter" class="submit-btn">
+            </form>
+        </div>
+        <div class="account-list">
+            {% for account in accounts %}
+            <div class="account-card">
+                <ul>
+                    <li><strong>ID:</strong> {{ account[0] }}</li>
+                    <li><strong>Username:</strong> {{ account[1] }}</li>
+                    <li><strong>Password:</strong> {{ account[2] }}</li>
+                    <li><strong>Type:</strong> {{ account[3] }}</li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
 {% endblock %}

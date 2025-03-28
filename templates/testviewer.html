@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Test Viewer{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('index') }}" class="home-link">Home</a>
+<h2>Test Viewer</h2>
+
+<div class="create-test-card" onclick="window.location.href='{{ url_for('create_test') }}'">
+    <div class="plus-sign">+</div>
+    <p>Create Test</p>
+</div>
+
+<div class="test-cards">
+    {% for test in tests %}
+        <div class="test-card">
+            <h3>{{ test['name'] }}</h3>
+            <form method="POST" action="{{ url_for('testviewer') }}">
+                <input type="hidden" name="testid" value="{{ test['testid'] }}">
+
+                <label>Question 1:</label>
+                <input type="text" name="question_1" value="{{ test['question_1'] }}" required>
+
+                <label>Question 2:</label>
+                <input type="text" name="question_2" value="{{ test['question_2'] }}" required>
+
+                <label>Question 3:</label>
+                <input type="text" name="question_3" value="{{ test['question_3'] }}" required>
+
+                <label>Question 4:</label>
+                <input type="text" name="question_4" value="{{ test['question_4'] }}" required>
+
+                <label>Question 5:</label>
+                <input type="text" name="question_5" value="{{ test['question_5'] }}" required>
+
+                <div style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+            <form action="{{ url_for('delete_test', test_id=test['testid']) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {% else %}
+        <p>No tests available.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+
+
