@@ -1,35 +1,38 @@
 create table tests (
-	testid int primary key,
+	testid int primary key auto_increment,
     id int not null,
     question_1 varchar(150),
     question_2 varchar(150),
     question_3 varchar(150),
     question_4 varchar(150),
     question_5 varchar(150),
-    foreign key (id) references accounts(id)
+    name varchar(150),
+    foreign key (id) references accounts(id) on delete cascade
 );
 create table accounts (
-	id int primary key,
+	id int primary key auto_increment,
     username varchar(150),
-    password varchar(150)
+    password varchar(150),
+    type varchar(1),
+    date_created timestamp default current_timestamp
 );
-create table responses (
-	responseid int primary key,
-    id int not null, 
-    testid int not null, 
-    response_1 varchar(200),
-    response_2 varchar(200),
-    response_3 varchar(200),
-    response_4 varchar(200),
-    response_5 varchar(200),
-    foreign key (id) references accounts(id),
-    foreign key (testid) references tests(testid)
+CREATE TABLE responses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    testid INT,
+    gradeid INT,
+    response_1 VARCHAR(255),
+    response_2 VARCHAR(255),
+    response_3 VARCHAR(255),
+    response_4 VARCHAR(255),
+    response_5 VARCHAR(255),
+    FOREIGN KEY (gradeid) REFERENCES grades(gradeid) ON DELETE CASCADE,
+    FOREIGN KEY (testid) REFERENCES tests(testid) ON DELETE CASCADE
 );
 create table grades (
-	gradeid int primary key, 
+	gradeid int primary key auto_increment, 
     id int not null,
     testid int not null, 
-    grade varchar(7) not null,
-    foreign key (id) references accounts(id),
-    foreign key (testid) references tests(testid)
+    grade varchar(7),
+    foreign key (id) references accounts(id) on delete cascade,
+    foreign key (testid) references tests(testid) on delete cascade
 );

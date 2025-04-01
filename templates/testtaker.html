@@ -1,5 +1,93 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Test Taker{% endblock %}
+{% block title %}Test Viewer{% endblock %}
 
 {% block content %}
+<h1>Available Tests</h1>
+
+<div class="test-container">
+    {% for test in tests %}
+    <div class="test-card">
+        <h2 onclick="toggleTest('{{ test.testid }}')">Test ID: {{ test.testid }}</h2>
+        
+        <form id="test-form-{{ test.testid }}" class="test-form hidden" method="POST" action="{{ url_for('submit_test', testid=test.testid) }}">
+            <label>Question 1: {{ test.question_1 }}</label>
+            <input type="text" name="response_1" required>
+            
+            <label>Question 2: {{ test.question_2 }}</label>
+            <input type="text" name="response_2" required>
+            
+            <label>Question 3: {{ test.question_3 }}</label>
+            <input type="text" name="response_3" required>
+            
+            <label>Question 4: {{ test.question_4 }}</label>
+            <input type="text" name="response_4" required>
+            
+            <label>Question 5: {{ test.question_5 }}</label>
+            <input type="text" name="response_5" required>
+            
+            <button type="submit">Submit Responses</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function toggleTest(testId) {
+        const form = document.getElementById(`test-form-${testId}`);
+        form.classList.toggle('hidden');
+    }
+</script>
+<style>
+    .test-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .test-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 2px 2px 10px #ccc;
+        transition: 0.3s;
+    }
+
+    .test-card:hover {
+        box-shadow: 4px 4px 15px #aaa;
+    }
+
+    .test-card h2 {
+        cursor: pointer;
+        color: #007BFF;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    form label {
+        display: block;
+        margin: 10px 0 5px;
+    }
+
+    form input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+
+    form button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}

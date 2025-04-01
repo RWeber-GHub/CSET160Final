@@ -431,7 +431,7 @@ h1, h2, h3, h4, h5 {
 .plus-sign {
     font-size: 48px;
     font-weight: bold;
-    color: #2ecc71; /* Green */
+    color: #2ecc71; 
 }
 
 .create-test-card p {

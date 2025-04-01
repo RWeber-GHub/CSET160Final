@@ -1,52 +1,19 @@
-{% extends 'base.html' %}
-
-{% block title %}Test Viewer{% endblock %}
-
-{% block content %}
-<a href="{{ url_for('index') }}" class="home-link">Home</a>
-<h2>Test Viewer</h2>
-
-<div class="create-test-card" onclick="window.location.href='{{ url_for('create_test') }}'">
-    <div class="plus-sign">+</div>
-    <p>Create Test</p>
-</div>
-
-<div class="test-cards">
+<div class="test-cards-container">
     {% for test in tests %}
-        <div class="test-card">
-            <h3>{{ test['name'] }}</h3>
-            <form method="POST" action="{{ url_for('testviewer') }}">
-                <input type="hidden" name="testid" value="{{ test['testid'] }}">
+    <div class="test-card">
+        <h2>{{ test.name }}</h2>
+        <p>Q1: {{ test.question_1 }}</p>
+        <p>Q2: {{ test.question_2 }}</p>
+        <p>Q3: {{ test.question_3 }}</p>
+        <p>Q4: {{ test.question_4 }}</p>
+        <p>Q5: {{ test.question_5 }}</p>
 
-                <label>Question 1:</label>
-                <input type="text" name="question_1" value="{{ test['question_1'] }}" required>
-
-                <label>Question 2:</label>
-                <input type="text" name="question_2" value="{{ test['question_2'] }}" required>
-
-                <label>Question 3:</label>
-                <input type="text" name="question_3" value="{{ test['question_3'] }}" required>
-
-                <label>Question 4:</label>
-                <input type="text" name="question_4" value="{{ test['question_4'] }}" required>
-
-                <label>Question 5:</label>
-                <input type="text" name="question_5" value="{{ test['question_5'] }}" required>
-
-                <div style="margin-top: 10px;">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
+        <div class="card-buttons">
+            <form action="{{ url_for('delete_test', test_id=test.testid) }}" method="POST" style="display:inline;">
+                <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this test?');">Delete</button>
             </form>
-            <form action="{{ url_for('delete_test', test_id=test['testid']) }}" method="POST" style="display:inline;">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+            <a href="{{ url_for('edit_test', test_id=test.testid) }}" class="edit-btn">Edit</a>
         </div>
-    {% else %}
-        <p>No tests available.</p>
+    </div>
     {% endfor %}
 </div>
-
-{% endblock %}
-
-
-

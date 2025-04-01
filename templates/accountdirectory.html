@@ -11,14 +11,27 @@
     <div class="container">
         <header>
             <h1>Account Directory</h1>
-            <a href="{{ url_for('index') }}" class="home-link">Home</a>
+            <a href="{{ url_for('testviewer') }}" class="home-link">Home</a>
         </header>
         <div class="filter-form">
             <form method="POST" action="/account_directory">
                 <label for="type">Filter by Type: </label>
                 <select name="type" id="type">
+                    <option value="">All</option>
                     <option value="A">Student</option>
                     <option value="B">Teacher</option>
+                </select>
+                <label for="name">Sort by Name: </label>
+                <select name="name" id="name">
+                    <option selected disabled>Name</option>
+                    <option value="A">ASC</option>
+                    <option value="B">DESC</option>
+                </select>
+                <label for="date">Sort by Date: </label>
+                <select name="date" id="date">
+                    <option selected disabled>Date</option>
+                    <option value="A">ASC</option>
+                    <option value="B">DESC</option>
                 </select>
                 <input type="submit" value="Filter" class="submit-btn">
             </form>

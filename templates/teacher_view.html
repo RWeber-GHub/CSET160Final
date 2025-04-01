@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a href="{{ url_for('index') }}" class="home-link">Home</a>
+<a href="{{ url_for('accountDirectory') }}" class="nav-item">Account Directory</a>
+<form method="POST" action="/signout" class="nav-item signout">
+    <button type="submit">Sign-Out</button>
+  </form>
+<div class="container">
+    <h1>Teacher View - Tests & Responses</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="test-cards-container">
+        {% for test in tests %}
+        <div class="test-card">
+            <h3>{{ test.name }}</h3>
+            <p><strong>Question 1:</strong> {{ test.question_1 }}</p>
+            <p><strong>Question 2:</strong> {{ test.question_2 }}</p>
+            <p><strong>Question 3:</strong> {{ test.question_3 }}</p>
+            <p><strong>Question 4:</strong> {{ test.question_4 }}</p>
+            <p><strong>Question 5:</strong> {{ test.question_5 }}</p>
+
+            <div class="card-buttons">
+                <form action="{{ url_for('testviewer') }}" method="POST" style="display: inline;">
+                    <input type="hidden" name="testid" value="{{ test.testid }}">
+                    <input type="hidden" name="action" value="edit">
+                    <form action="{{ url_for('edit_test', test_id=test['testid']) }}" method="POST">
+                        <input type="hidden" name="action" value="edit">
+                        <button type="submit">Edit</button>
+                    </form>
+                </form>
+                
+                <form action="{{ url_for('delete_test', test_id=test.testid) }}" method="POST" style="display: inline;">
+                    <button class="delete-btn" onclick="return confirm('Are you sure you want to delete this test?')">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+
+        <a href="{{ url_for('create_test') }}" class="create-test-card">
+            <div class="plus-sign">+</div>
+            <p>Create Test</p>
+        </a>
+    </div>
+
+    <h2>Student Responses</h2>
+    <div class="test-cards-container">
+        {% for response in responses %}
+            {% set has_grade = false %}
+            {% for grade in grades %}
+                {% if grade.testid == response.testid %}
+                    {% set has_grade = true %}
+                {% endif %}
+            {% endfor %}
+
+            {% if has_grade == True%}
+                <div class="test-card">
+                    <form method="POST">
+                        <input type="hidden" name="testid" value="{{ response.testid }}">
+                        <input type="hidden" name="action" value="grade">
+                        <label for="grade">Grade Percentage</label>
+                        <input type="number" name="grade" min="0" max="100" step="5" required/>
+                        <input type="submit" value="Grade" class="submit-btn">
+                    </form>
+                    <h4>Test ID: {{ response.testid }}</h4>
+                    <p><strong>Response 1:</strong> {{ response.response_1 }}</p>
+                    <p><strong>Response 2:</strong> {{ response.response_2 }}</p>
+                    <p><strong>Response 3:</strong> {{ response.response_3 }}</p>
+                    <p><strong>Response 4:</strong> {{ response.response_4 }}</p>
+                    <p><strong>Response 5:</strong> {{ response.response_5 }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

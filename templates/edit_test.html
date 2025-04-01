@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Test{% endblock %}
+
+{% block content %}
+    <h1>Edit Test</h1>
+
+    <form action="{{ url_for('edit_test', test_id=test['testid']) }}" method="POST">
+        <label for="name">Test Name:</label>
+        <input type="text" name="name" id="name" value="{{ test['name'] }}" required><br>
+
+        <label for="question_1">Question 1:</label>
+        <input type="text" name="question_1" id="question_1" value="{{ test['question_1'] }}" required><br>
+
+        <label for="question_2">Question 2:</label>
+        <input type="text" name="question_2" id="question_2" value="{{ test['question_2'] }}" required><br>
+
+        <label for="question_3">Question 3:</label>
+        <input type="text" name="question_3" id="question_3" value="{{ test['question_3'] }}" required><br>
+
+        <label for="question_4">Question 4:</label>
+        <input type="text" name="question_4" id="question_4" value="{{ test['question_4'] }}" required><br>
+
+        <label for="question_5">Question 5:</label>
+        <input type="text" name="question_5" id="question_5" value="{{ test['question_5'] }}" required><br>
+
+        <button type="submit">Update Test</button>
+    </form>
+    <a href="{{ url_for('testviewer') }}">Back to Test Viewer</a>
+{% endblock %}

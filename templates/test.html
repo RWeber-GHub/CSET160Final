@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <h2 class="mb-4">Test {{ testid }}</h2>
+
+    {% if has_taken_test %}
+    <div class="card text-center border-warning">
+        <div class="card-body">
+            <h5 class="card-title text-warning">You have already taken this test</h5>
+            <p class="card-text">You cannot retake this test.</p>
+            <a href="{{ url_for('testviewer') }}" class="btn btn-primary">Back to Tests</a>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- ✅ Display the test form if the user hasn't taken it -->
+    <form method="POST" action="{{ url_for('submit_test', testid=testid) }}">
+        <div class="form-group mb-3">
+            <label for="response_1">Response 1</label>
+            <input type="text" name="response_1" id="response_1" class="form-control" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="response_2">Response 2</label>
+            <input type="text" name="response_2" id="response_2" class="form-control" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="response_3">Response 3</label>
+            <input type="text" name="response_3" id="response_3" class="form-control" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="response_4">Response 4</label>
+            <input type="text" name="response_4" id="response_4" class="form-control" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="response_5">Response 5</label>
+            <input type="text" name="response_5" id="response_5" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit Test</button>
+    </form>
+    {% endif %}
+
+</div>
+{% endblock %}
