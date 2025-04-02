@@ -238,6 +238,7 @@ h1 {
 .filter-form {
     text-align: center;
     margin-bottom: 20px;
+    color: white;
 }
 
 .filter-form form {
@@ -266,6 +267,19 @@ select {
 
 .submit-btn:hover {
     background-color: #218838;
+}
+
+.grade-card {
+  width: 250px;
+  margin: auto;
+  margin-top: 25px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s ease-in-out;
 }
 
 /* Account List Styles */

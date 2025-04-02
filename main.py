@@ -95,7 +95,6 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         account_type = request.form['type']
-        print(username, password, account_type)
         try:
             conn.execute(text("insert into accounts (username, password, type) values (:username, :password, :type)"), {'username': username, 'password': password, 'type': account_type})
             conn.commit()
@@ -105,7 +104,6 @@ def signup():
             user_type = user[3]
             session['user_id'] = user_id
             session['user_type'] = user_type
-            print(session.get('user_id'))
             return redirect(url_for("testviewer"))
         except Exception as e:
             print(f"Error: {e}")
@@ -134,7 +132,10 @@ def testviewer():
                     if action == 'grade':
                         testid = request.form.get('testid')
                         grade = request.form.get('grade')
-                        user_id = session.get('user_id')
+                        results = conn.execute(text('select * from responses where testid = :testid'),  {'testid': testid}).all()
+                        if results:
+                            for result in results:
+                                user_id = result[0]
                         if grade:
                             grade = f"{grade}/100"
                             conn.execute(text("insert into grades (id, testid, grade) VALUES (:id, :testid, :grade)"), {'id': user_id, 'testid': testid, 'grade': grade})
@@ -142,16 +143,46 @@ def testviewer():
                     else:
                         flash("Please provide a valid grade", "danger")
                     return redirect(url_for('testviewer'))
+        
+
+                user_id = session.get('user_id')  
+
+                query = text("""
+                    select r.testid, r.id as id, t.name as name, 
+                    r.response_1, r.response_2, r.response_3, r.response_4, r.response_5, 
+                    g.grade
+                    from responses r
+                    join tests t on r.testid = t.testid 
+                    left join grades g on r.testid = g.testid and r.id = g.id
+                    where t.id = :user_id
+                    and g.grade is null and r.id != :user_id
+                """)
+
+                result = conn.execute(query, {'user_id': user_id}).fetchall()
+                print(f'***{result}***')
+
+                responses = [
+                    {
+                        'testid': row.testid,
+                        'id': row.id,
+                        'name': row.name,
+                        'grade': row.grade,
+                        'response_1': row.response_1,
+                        'response_2': row.response_2,
+                        'response_3': row.response_3,
+                        'response_4': row.response_4,
+                        'response_5': row.response_5
+                    }
+                    for row in result
+                ]
                 
+                print(f'***{responses}***')
 
-                tests = conn.execute(text('SELECT * FROM tests')).fetchall()
-                responses = conn.execute(text('SELECT * FROM responses')).fetchall()
-                grades = conn.execute(text('SELECT * FROM grades')).fetchall()
+                test = text("select * from tests where id = :user_id")
+                tests = conn.execute(test, {'user_id': user_id}).all()
                 tests = [dict(row._mapping) for row in tests]
-                responses = [dict(row._mapping) for row in responses]
-                grades = [dict(row._mapping) for row in grades]
 
-                return render_template('teacher_view.html', tests=tests, responses=responses, grades=grades)
+                return render_template('teacher_view.html', tests=tests, responses=responses)
 
             elif user_type == 'A':
                 tests = conn.execute(text('SELECT * FROM tests')).fetchall()
@@ -166,6 +197,20 @@ def testviewer():
         logging.error(f"Error: {e}")
         flash("An error occurred while loading the tests.", "danger")
         return redirect(url_for('index'))
+    
+@app.route('/grade_response', methods=['POST'])
+def grade_response():
+    testid = request.form.get('testid')
+    id = request.form.get('id') 
+    grade = request.form.get('grade')
+    print(f'***{id,testid,grade}***')
+    try:
+        conn.execute(text("insert into grades (id, testid, grade) VALUES (:id, :testid, :grade)"), {'id': id, 'testid': testid, 'grade': grade})
+        conn.commit()
+        return redirect(url_for('testviewer'))
+    except Exception as e:
+        flash(f"Error occurred: {str(e)}", "error")
+        return redirect(url_for('testviewer'))
 
 @app.route('/edit_test/<int:test_id>', methods=['GET', 'POST'])
 def edit_test(test_id):
@@ -310,8 +355,6 @@ def view_test(testid):
 
     return render_template('test.html', testid=testid, has_taken_test=has_taken_test)
 
-
-
 @app.route('/submit_test/<int:testid>', methods=['POST'])
 def submit_test(testid):
     
@@ -338,8 +381,10 @@ def submit_test(testid):
             if result > 0:
                 flash("You have already taken this test.", "warning")
                 return redirect(url_for('testviewer'))
+            
 
     except Exception as e:
+        print('error')
         flash(f"Error checking test status: {str(e)}", "danger")
         return redirect(url_for('testviewer'))
 
@@ -362,20 +407,20 @@ def submit_test(testid):
             trans = conn.begin()
             
             stmt = text('''
-                INSERT INTO responses (testid, id, response_1, response_2, response_3, response_4, response_5)
-                VALUES (:testid, :user_id, :r1, :r2, :r3, :r4, :r5)
+                INSERT INTO responses (id, testid, response_1, response_2, response_3, response_4, response_5)
+                VALUES (:user_id, :testid, :r1, :r2, :r3, :r4, :r5)
             ''')
 
             conn.execute(stmt, {
-                'testid': testid,
-                'user_id': user_id, 
+                'user_id': user_id,
+                'testid': testid, 
                 'r1': responses['response_1'],
                 'r2': responses['response_2'],
                 'r3': responses['response_3'],
                 'r4': responses['response_4'],
                 'r5': responses['response_5']
             })
-
+            print(user_id, testid, responses['response_1'],responses['response_2'],responses['response_3'],responses['response_4'],responses['response_5'])
             trans.commit()
             flash('Responses submitted successfully!', 'success')
 

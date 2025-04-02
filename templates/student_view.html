@@ -8,7 +8,6 @@
 <div class="container">
     <h1>Student View - Take Test</h1>
 
-    <!-- Flash messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
@@ -19,46 +18,35 @@
 
     <div class="test-cards-container">
         {% for test in tests %}
-            {% set has_grade = false %}
-            
-            {% for grade in grades %}
-                {% if grade.testid == test.testid %}
-                    {% set has_grade = true %}
-                {% endif %}
-            {% endfor %}
-            
-            {% if not has_grade %}
             <div class="test-card">
                 <h3>{{ test.name }}</h3>
                 <form action="{{ url_for('submit_test', testid=test.testid) }}" method="POST">
-                    <p><strong>Question 1:</strong> {{ test.question_1 }}</p>
-                    <input type="text" name="response_1" placeholder="Your answer" required>
-
-                    <p><strong>Question 2:</strong> {{ test.question_2 }}</p>
-                    <input type="text" name="response_2" placeholder="Your answer" required>
-
-                    <p><strong>Question 3:</strong> {{ test.question_3 }}</p>
-                    <input type="text" name="response_3" placeholder="Your answer" required>
-
-                    <p><strong>Question 4:</strong> {{ test.question_4 }}</p>
-                    <input type="text" name="response_4" placeholder="Your answer" required>
-
-                    <p><strong>Question 5:</strong> {{ test.question_5 }}</p>
-                    <input type="text" name="response_5" placeholder="Your answer" required>
-
-                    <div class="card-buttons">
-                        <button type="submit" class="edit-btn">Submit Test</button>
-                    </div>
-                </form>
+                  <p><strong>Question 1:</strong> {{ test.question_1 }}</p>
+                  <input type="text" name="response_1" placeholder="Your answer" required>
+            
+                  <p><strong>Question 2:</strong> {{ test.question_2 }}</p>
+                  <input type="text" name="response_2" placeholder="Your answer" required>
+            
+                  <p><strong>Question 3:</strong> {{ test.question_3 }}</p>
+                  <input type="text" name="response_3" placeholder="Your answer" required>
+            
+                  <p><strong>Question 4:</strong> {{ test.question_4 }}</p>
+                  <input type="text" name="response_4" placeholder="Your answer" required>
+            
+                  <p><strong>Question 5:</strong> {{ test.question_5 }}</p>
+                  <input type="text" name="response_5" placeholder="Your answer" required>
+            
+                  <div class="card-buttons">
+                      <button type="submit" class="edit-btn">Submit Test</button>
+                  </div>
+              </form>
             </div>
-            {% endif %}
         {% endfor %}
     </div>
-
     {% if grades %}
       <div class="grade-card">
         {% for grade in grades %}
-          <h4>Test ID: {{ grade.testid }} - Grade: {{ grade.grade }}</h4>
+            <h4>Test ID: {{ grade.testid }}- Grade: {{ grade.grade }}</h4>
         {% endfor %}
       </div>
     {% endif %}
